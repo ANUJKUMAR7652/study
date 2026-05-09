@@ -1,3 +1,19 @@
+/* Custom Hindi Font Setup */
+@font-face {
+    font-family: 'StudyLikeHindi';
+    src: url('hindi.ttf') format('truetype');
+}
+
+body {
+    background-color: #041031;
+    color: white;
+    font-family: 'StudyLikeHindi', Arial, sans-serif; /* Ab app Hindi font use karega */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+/* Baaki aapka purana CSS code niche same rahega... */
 body {
     background-color: #041031;
     color: white;
