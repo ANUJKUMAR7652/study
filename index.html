@@ -3,16 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyLike Hello App</title>
+    <title>StudyLike KBC Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Hello World!</h1>
-        <p>Yeh mera pehla JavaScript App hai.</p>
-        <button id="btn">Click Me</button>
-        <p id="message"></p>
+    <!-- DASHBOARD: Yahan CSV upload hogi aur list dikhegi -->
+    <div id="dashboard-screen" class="container">
+        <h1 class="main-title">StudyLike Quizzes</h1>
+        
+        <div class="upload-section">
+            <p>Nayi Quiz CSV File Upload Karein:</p>
+            <input type="file" id="csvFileInput" accept=".csv">
+        </div>
+
+        <div id="quiz-list" class="quiz-list-container">
+            <!-- Uploaded CSV files yahan dikhengi -->
+        </div>
     </div>
+
+    <!-- QUIZ SCREEN: Jab Play par click hoga tab yeh dikhega -->
+    <div id="quiz-screen" class="container" style="display: none;">
+        <div class="header">
+            <button id="back-btn" onclick="goBack()">⬅ Back</button>
+            <div id="q-counter" class="counter">Q: 1/20</div>
+            <div class="score-board">Score: <span id="score">0</span></div>
+        </div>
+
+        <!-- REVERSE PROGRESS BAR -->
+        <div class="timer-bar-container">
+            <div id="timer-bar"></div>
+        </div>
+        
+        <div class="question-box" id="question-text">
+            Question load ho raha hai...
+        </div>
+
+        <div class="options-grid">
+            <button class="option-btn" id="opt0" onclick="checkAnswer(0)"></button>
+            <button class="option-btn" id="opt1" onclick="checkAnswer(1)"></button>
+            <button class="option-btn" id="opt2" onclick="checkAnswer(2)"></button>
+            <button class="option-btn" id="opt3" onclick="checkAnswer(3)"></button>
+        </div>
+
+        <button id="next-btn" onclick="nextQuestion()" style="display:none;">Agla Sawaal ➔</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
