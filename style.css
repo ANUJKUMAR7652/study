@@ -4,93 +4,96 @@
 }
 
 body {
-    background-color: #0d0d0d; /* Deep Dark Background */
+    background-color: #0d0d0d; 
     color: white;
     font-family: 'StudyLikeHindi', Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* Padding hata di taaki full screen mile */
+    height: 100vh; /* Poori screen ki height */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
 }
 
-.container { width: 100%; max-width: 500px; }
+.container { 
+    width: 100%; 
+    height: 100%;
+    max-width: 500px; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
 /* NEON STYLING */
-.neon-text {
-    color: #00ffff;
-    text-shadow: 0 0 10px #00ffff;
-    text-align: center;
-}
-
-.neon-box {
-    background: #111;
-    border: 2px solid #00ffff;
-    box-shadow: 0 0 15px #00ffff; /* Cyan Glow */
-    border-radius: 15px;
-    padding: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    text-align: center;
-    min-height: 80px;
-    color: #00ffff;
-}
-
-.neon-option {
-    background: #111;
-    border: 2px solid #ff00ff; /* Pink Glow */
-    box-shadow: 0 0 10px #ff00ff;
-    border-radius: 50px;
-    color: #ff00ff;
-    padding: 15px;
-    font-size: 18px;
-    cursor: pointer;
-    text-align: left;
-    padding-left: 20px;
-    transition: 0.3s;
-}
-
-/* CORRECT AND WRONG GLOWS */
-.correct { background: #003300 !important; border-color: #00ff00 !important; box-shadow: 0 0 20px #00ff00 !important; color: #00ff00 !important; }
-.wrong { background: #330000 !important; border-color: #ff0000 !important; box-shadow: 0 0 20px #ff0000 !important; color: #ff0000 !important; }
-
-/* HIDDEN BACK BUTTON */
-#back-btn {
-    opacity: 0; /* Dikhega nahi par exist karega */
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-    z-index: 100;
-}
-
-/* TIMER BAR */
-.timer-bar-container { width: 100%; height: 8px; background: #222; border-radius: 5px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 0 5px #00ffff; }
-#timer-bar { height: 100%; width: 100%; background: #00ffff; transition: width 0.1s linear; }
-
-/* +1 POINT ANIMATION */
-#point-animation {
-    position: fixed;
-    top: -50px; /* Start me upar chupa hoga */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 40px;
-    font-weight: bold;
-    color: #00ff00;
-    text-shadow: 0 0 20px #00ff00;
-    opacity: 0;
-    transition: all 0.5s ease-in-out;
-    z-index: 1000;
-}
-.show-point {
-    top: 30% !important; /* Neeche aayega */
-    opacity: 1 !important;
-}
+.neon-text { color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; }
 
 /* Dashboard UI */
 .upload-section, .quiz-item {
     background: #111; border: 1px solid #00ffff; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 10px #00ffff;
 }
-.play-btn { background: #00ffff; color: #000; font-weight: bold; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; box-shadow: 0 0 10px #00ffff; }
+.play-btn { background: #00ffff; color: #000; font-weight: bold; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; }
+
+/* Quiz Header & Timer */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 18px; }
+.timer-bar-container { width: 100%; height: 8px; background: #222; border-radius: 5px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 0 5px #00ffff; }
+#timer-bar { height: 100%; width: 100%; background: #00ffff; transition: width 0.1s linear; }
+
+/* QUESTION BOX (Bada aur Center me) */
+.question-box {
+    background: #111;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 15px #00ffff;
+    border-radius: 15px;
+    padding: 30px 20px;
+    font-size: 24px; /* Text thoda bada kiya */
+    font-weight: bold;
+    margin-bottom: auto; /* Isse options niche push ho jayenge */
+    text-align: center;
+    color: #00ffff;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* OPTIONS LIST FORMAT (A, B, C, D) */
+.options-grid {
+    display: flex;
+    flex-direction: column; /* Grid hata kar ek ke niche ek List bana di */
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.option-btn {
+    background: #111;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
+    border-radius: 15px; /* Thoda boxy look */
+    color: white;
+    padding: 18px;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.opt-letter {
+    color: #FFD700; /* A, B, C, D Golden color me */
+    font-weight: bold;
+    margin-right: 15px;
+    font-size: 22px;
+}
+
+/* CORRECT AND WRONG GLOWS */
+.correct { background: #003300 !important; border-color: #00ff00 !important; box-shadow: 0 0 20px #00ff00 !important; }
+.wrong { background: #330000 !important; border-color: #ff0000 !important; box-shadow: 0 0 20px #ff0000 !important; }
+
+/* HIDDEN BACK BUTTON */
+#back-btn { opacity: 0; position: absolute; top: 20px; left: 20px; width: 60px; height: 60px; cursor: pointer; z-index: 100; }
+
+/* +1 POINT ANIMATION */
+#point-animation { position: fixed; top: -50px; left: 50%; transform: translateX(-50%); font-size: 50px; font-weight: bold; color: #00ff00; text-shadow: 0 0 20px #00ff00; opacity: 0; transition: all 0.5s ease-in-out; z-index: 1000; }
+.show-point { top: 40% !important; opacity: 1 !important; }
