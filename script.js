@@ -56,6 +56,10 @@ function renderQuizList() {
 }
 
 function startQuiz(quizIndex) {
+    // AUDIO UNLOCK FIX FOR ANDROID: User ne click kiya hai, toh ek baar silent play karke pause kar do
+    tickSound.play().then(() => tickSound.pause()).catch(e => console.log(e));
+    revealSound.play().then(() => revealSound.pause()).catch(e => console.log(e));
+
     currentQuizData = quizzes[quizIndex].data;
     currentQuestionIndex = 0;
     score = 0;
@@ -77,10 +81,14 @@ function loadQuestion() {
     document.getElementById('question-text').innerText = currentQuestion.q;
     document.getElementById('q-counter').innerText = `Q: ${currentQuestionIndex + 1}/${currentQuizData.length}`;
 
+    // A, B, C, D Labels Array
+    const labels = ['A', 'B', 'C', 'D'];
+
     for(let i = 0; i < 4; i++) {
         let btn = document.getElementById(`opt${i}`);
-        btn.innerText = currentQuestion.options[i];
-        btn.className = "option-btn neon-option"; 
+        // Yahan A, B, C, D design add kiya gaya hai
+        btn.innerHTML = `<span class="opt-letter">${labels[i]}:</span> <span>${currentQuestion.options[i]}</span>`;
+        btn.className = "option-btn"; 
         btn.disabled = false; 
     }
     startTimer();
@@ -94,7 +102,7 @@ function startTimer() {
     timerBar.style.backgroundColor = '#00ffff'; 
     
     tickSound.currentTime = 0;
-    tickSound.play().catch(e => console.log("Auto-play prevented by browser"));
+    tickSound.play().catch(e => console.log(e));
 
     timerInterval = setInterval(() => {
         timeLeft -= 0.1;
@@ -115,15 +123,15 @@ function checkAnswer(selectedIndex) {
     clearInterval(timerInterval); 
     tickSound.pause();
     revealSound.currentTime = 0;
-    revealSound.play().catch(e => console.log("Sound error"));
+    revealSound.play().catch(e => console.log(e));
 
     const currentQuestion = currentQuizData[currentQuestionIndex];
     
     if(selectedIndex === currentQuestion.answer) {
         document.getElementById(`opt${selectedIndex}`).classList.add('correct');
-        score += 1; // +1 Point jaisa aapne kaha
+        score += 1; 
         document.getElementById('score').innerText = score;
-        triggerPointAnimation(); // Animation Call
+        triggerPointAnimation(); 
     } else {
         document.getElementById(`opt${selectedIndex}`).classList.add('wrong');
         document.getElementById(`opt${currentQuestion.answer}`).classList.add('correct');
@@ -133,7 +141,7 @@ function checkAnswer(selectedIndex) {
 
 function autoRevealAnswer() {
     revealSound.currentTime = 0;
-    revealSound.play().catch(e => console.log("Sound error"));
+    revealSound.play().catch(e => console.log(e));
     const currentQuestion = currentQuizData[currentQuestionIndex];
     document.getElementById(`opt${currentQuestion.answer}`).classList.add('correct');
     lockAndProceed();
@@ -144,14 +152,13 @@ function triggerPointAnimation() {
     pointAnim.classList.add('show-point');
     setTimeout(() => {
         pointAnim.classList.remove('show-point');
-    }, 2000); // 2 Second baad gayab
+    }, 2000);
 }
 
 function lockAndProceed() {
     for(let i = 0; i < 4; i++) {
         document.getElementById(`opt${i}`).disabled = true;
     }
-    // 7 second ka wait aur uske baad next question
     setTimeout(() => {
         currentQuestionIndex++;
         if(currentQuestionIndex < currentQuizData.length) {
