@@ -1,0 +1,6 @@
+{
+  "appId": "com.studylike.hello",
+  "appName": "StudyLikeHello",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
