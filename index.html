@@ -7,46 +7,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- DASHBOARD: Yahan CSV upload hogi aur list dikhegi -->
+    <audio id="tick-sound" src="tick.mp3" loop></audio>
+    <audio id="reveal-sound" src="reveal.mp3"></audio>
+
+    <div id="point-animation">+1 Point</div>
+
     <div id="dashboard-screen" class="container">
-        <h1 class="main-title">StudyLike Quizzes</h1>
-        
+        <h1 class="main-title neon-text">StudyLike Quizzes</h1>
         <div class="upload-section">
             <p>Nayi Quiz CSV File Upload Karein:</p>
             <input type="file" id="csvFileInput" accept=".csv, text/csv, application/vnd.ms-excel, text/plain, */*">
         </div>
-
-        <div id="quiz-list" class="quiz-list-container">
-            <!-- Uploaded CSV files yahan dikhengi -->
-        </div>
+        <div id="quiz-list" class="quiz-list-container"></div>
     </div>
 
-    <!-- QUIZ SCREEN: Jab Play par click hoga tab yeh dikhega -->
     <div id="quiz-screen" class="container" style="display: none;">
         <div class="header">
-            <button id="back-btn" onclick="goBack()">⬅ Back</button>
-            <div id="q-counter" class="counter">Q: 1/20</div>
-            <div class="score-board">Score: <span id="score">0</span></div>
+            <button id="back-btn" onclick="goBack()">Back</button>
+            <div id="q-counter" class="counter neon-text">Q: 1/20</div>
+            <div class="score-board neon-text">Score: <span id="score">0</span></div>
         </div>
 
-        <!-- REVERSE PROGRESS BAR -->
         <div class="timer-bar-container">
             <div id="timer-bar"></div>
         </div>
         
-        <div class="question-box" id="question-text">
+        <div class="question-box neon-box" id="question-text">
             Question load ho raha hai...
         </div>
 
         <div class="options-grid">
-            <button class="option-btn" id="opt0" onclick="checkAnswer(0)"></button>
-            <button class="option-btn" id="opt1" onclick="checkAnswer(1)"></button>
-            <button class="option-btn" id="opt2" onclick="checkAnswer(2)"></button>
-            <button class="option-btn" id="opt3" onclick="checkAnswer(3)"></button>
+            <button class="option-btn neon-option" id="opt0" onclick="checkAnswer(0)"></button>
+            <button class="option-btn neon-option" id="opt1" onclick="checkAnswer(1)"></button>
+            <button class="option-btn neon-option" id="opt2" onclick="checkAnswer(2)"></button>
+            <button class="option-btn neon-option" id="opt3" onclick="checkAnswer(3)"></button>
         </div>
-
-        <button id="next-btn" onclick="nextQuestion()" style="display:none;">Agla Sawaal ➔</button>
-    </div>
+        </div>
 
     <script src="script.js"></script>
 </body>
