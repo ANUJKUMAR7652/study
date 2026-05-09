@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyLike KBC Quiz</title>
+    <title>TopStudyPro Quiz - Pro Version</title>
     
     <style>
         @font-face {
@@ -11,79 +11,39 @@
             src: url('hindi.ttf') format('truetype');
         }
 
-        body {
-            background-color: #050505; 
-            color: white;
-            font-family: 'StudyLikeHindi', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            overflow: hidden; 
+        /* CSS Variables Settings se change hone ke liye */
+        :root {
+            --main-neon: #0ff; /* Default Cyan */
+            --bg-color: #050505;
         }
 
-        .container { 
-            width: 100%; 
-            height: 100%;
-            max-width: 450px; 
-            display: flex;
-            flex-direction: column;
-            padding: 20px 20px 5px 20px; /* Neeche thodi jagah signature ke liye chhodi hai */
-            box-sizing: border-box;
-            position: relative;
-        }
+        body { background-color: var(--bg-color); color: white; font-family: 'StudyLikeHindi', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; overflow: hidden; }
+        .container { width: 100%; height: 100%; max-width: 450px; display: flex; flex-direction: column; padding: 20px 20px 5px 20px; box-sizing: border-box; position: relative; }
 
-        .neon-text-cyan { color: #0ff; text-shadow: 0 0 10px #0ff; text-align: center; }
+        .neon-text-dynamic { color: var(--main-neon); text-shadow: 0 0 10px var(--main-neon); text-align: center; }
         .neon-text-pink { color: #f0f; text-shadow: 0 0 10px #f0f; }
 
-        .main-title { text-align: center; font-size: 32px; margin-bottom: 30px; }
+        /* Top Bar for Profile & Settings */
+        .top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .icon-btn { background: transparent; border: 2px solid var(--main-neon); color: var(--main-neon); border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; box-shadow: 0 0 10px var(--main-neon); }
+
+        .main-title { text-align: center; font-size: 32px; margin-bottom: 10px; margin-top: 0; }
         .upload-section { text-align: center; margin-bottom: 20px; }
-        .upload-section input { width: 100%; margin-top: 15px; color: #0ff; }
-        .quiz-item { background: #111; border: 1px solid #0ff; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 10px #0ff; }
-        .play-btn { background: #0ff; color: #000; font-weight: bold; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; box-shadow: 0 0 10px #0ff; }
+        
+        /* MULTIPLE FILE UPLOAD STYLE */
+        .upload-section input { width: 100%; margin-top: 15px; color: var(--main-neon); }
+        
+        .play-btn { background: var(--main-neon); color: #000; font-weight: bold; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px var(--main-neon); width: 100%; margin-top: 20px; display: none; }
+        
+        .retest-btn { background: #f0f; color: #fff; font-weight: bold; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px #f0f; width: 100%; margin-top: 20px; display: none; }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
-        .timer-bar-container { width: 100%; height: 8px; background: #222; border-radius: 5px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 0 8px #0ff; }
-        #timer-bar { height: 100%; width: 100%; background: #0ff; transition: width 0.1s linear; }
+        .timer-bar-container { width: 100%; height: 8px; background: #222; border-radius: 5px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 0 8px var(--main-neon); }
+        #timer-bar { height: 100%; width: 100%; background: var(--main-neon); transition: width 0.1s linear; }
 
-        .question-box {
-            flex-grow: 1; 
-            max-height: 35%; 
-            background: #0a0a0a;
-            border: 2px solid #0ff;
-            box-shadow: 0 0 15px #0ff;
-            border-radius: 15px;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-y: auto;
-        }
-
+        .question-box { flex-grow: 1; max-height: 35%; background: #0a0a0a; border: 2px solid var(--main-neon); box-shadow: 0 0 15px var(--main-neon); border-radius: 15px; padding: 20px; font-size: 24px; font-weight: bold; margin-bottom: 30px; text-align: center; color: #fff; display: flex; align-items: center; justify-content: center; overflow-y: auto; }
         .options-grid { display: flex; flex-direction: column; gap: 15px; margin-bottom: auto; }
-
-        .option-btn {
-            background: #0a0a0a;
-            border: 2px solid #f0f;
-            box-shadow: 0 0 10px #f0f;
-            border-radius: 12px;
-            color: white;
-            padding: 18px 20px;
-            font-size: 20px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            font-family: 'StudyLikeHindi', Arial, sans-serif;
-        }
-
+        .option-btn { background: #0a0a0a; border: 2px solid #f0f; box-shadow: 0 0 10px #f0f; border-radius: 12px; color: white; padding: 18px 20px; font-size: 20px; cursor: pointer; text-align: left; transition: all 0.3s ease; display: flex; align-items: center; font-family: 'StudyLikeHindi', Arial, sans-serif; }
         .opt-letter { color: #f0f; font-weight: bold; margin-right: 15px; font-size: 22px; text-shadow: 0 0 5px #f0f; }
 
         .correct { background: #002200 !important; border-color: #0f0 !important; box-shadow: 0 0 20px #0f0 !important; }
@@ -92,26 +52,19 @@
         .wrong .opt-letter { color: #f00 !important; text-shadow: 0 0 5px #f00 !important; }
 
         #back-btn { opacity: 0; position: absolute; top: 10px; left: 10px; width: 60px; height: 50px; cursor: pointer; z-index: 100; }
-
-        #point-animation { 
-            position: absolute; top: -50px; left: 50%; transform: translateX(-50%); font-size: 45px; 
-            font-weight: bold; color: #0f0; text-shadow: 0 0 20px #0f0; opacity: 0; 
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; 
-        }
+        #point-animation { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); font-size: 45px; font-weight: bold; color: #0f0; text-shadow: 0 0 20px #0f0; opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; }
         .show-point { top: 40% !important; opacity: 1 !important; }
 
-        /* BRANDING SIGNATURE CSS */
-        .creator-signature {
-            text-align: center;
-            font-size: 13px;
-            color: #666;
-            font-family: Arial, sans-serif;
-            margin-top: 15px;
-            padding-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-        .creator-signature b { color: #aaa; }
-        .creator-handle { color: #0ff; font-weight: bold; text-shadow: 0 0 5px #0ff; margin-left: 5px; }
+        /* MODALS (Settings & Profile) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #111; border: 2px solid var(--main-neon); border-radius: 15px; padding: 20px; width: 85%; text-align: center; box-shadow: 0 0 20px var(--main-neon); }
+        .modal-content h2 { color: var(--main-neon); margin-top: 0; }
+        .close-btn { background: #f0f; color: white; border: none; padding: 10px 20px; margin-top: 20px; border-radius: 5px; cursor: pointer; }
+        .setting-row { margin: 15px 0; text-align: left; }
+        .setting-row select { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid var(--main-neon); border-radius: 5px; margin-top: 5px; }
+
+        .creator-signature { text-align: center; font-size: 13px; color: #666; font-family: Arial, sans-serif; margin-top: auto; padding-bottom: 5px; }
+        .creator-handle { color: var(--main-neon); font-weight: bold; text-shadow: 0 0 5px var(--main-neon); margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -121,23 +74,66 @@
 
     <div id="point-animation">+1 Point</div>
 
-    <div id="dashboard-screen" class="container">
-        <h1 class="main-title neon-text-cyan">StudyLike Quizzes</h1>
-        <div class="upload-section">
-            <p style="color: #fff; font-size: 18px;">Nayi Quiz CSV File Upload Karein:</p>
-            <input type="file" id="csvFileInput" accept=".csv, text/csv, application/vnd.ms-excel, text/plain, */*">
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <h2>👤 Profile</h2>
+            <p style="font-size: 20px;"><b>Anuj Kumar</b></p>
+            <p style="color: #0ff; font-size: 18px;">@TopStudyPro</p>
+            <p>App Version: 2.0 (Pro)</p>
+            <p>Total Files Played: <span id="files-played">0</span></p>
+            <button class="close-btn" onclick="closeModal('profile-modal')">Close</button>
         </div>
-        <div id="quiz-list" class="quiz-list-container"></div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>⚙️ Settings</h2>
+            <div class="setting-row">
+                <label>Timer Speed (Seconds):</label>
+                <select id="timer-setting" onchange="updateSettings()">
+                    <option value="5">5 Seconds (Fast)</option>
+                    <option value="7">7 Seconds (Medium)</option>
+                    <option value="10">10 Seconds (Relaxed)</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <label>App Theme Color:</label>
+                <select id="theme-setting" onchange="updateSettings()">
+                    <option value="#0ff">Neon Cyan</option>
+                    <option value="#0f0">Toxic Green</option>
+                    <option value="#ff0000">Danger Red</option>
+                    <option value="#ffa500">Gold</option>
+                </select>
+            </div>
+            <button class="close-btn" onclick="closeModal('settings-modal')">Save & Close</button>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="container">
+        <div class="top-bar">
+            <button class="icon-btn" onclick="openModal('profile-modal')">👤</button>
+            <button class="icon-btn" onclick="openModal('settings-modal')">⚙️</button>
+        </div>
+
+        <h1 class="main-title neon-text-dynamic">TopStudyPro</h1>
+        
+        <div class="upload-section">
+            <p style="color: #fff; font-size: 16px;">Multiple CSV Files Ek Sath Select Karein:</p>
+            <input type="file" id="csvFileInput" accept=".csv" multiple>
+        </div>
+        
+        <p id="mega-status" style="text-align:center; color:#0f0; font-weight:bold;"></p>
+        <button id="play-mega-btn" class="play-btn" onclick="startMegaQuiz()">▶ Play Mega Quiz</button>
         
         <div class="creator-signature">
-            Created by <b>Anuj Kumar</b> | <span class="creator-handle">@TopStudyPro</span>
+            App by <b>Anuj Kumar</b> | <span class="creator-handle">@TopStudyPro</span>
         </div>
     </div>
 
     <div id="quiz-screen" class="container" style="display: none;">
         <div class="header">
             <button id="back-btn" onclick="goBack()">B</button>
-            <div id="q-counter" class="counter neon-text-cyan">Q: 1/20</div>
+            <div id="q-counter" class="counter neon-text-dynamic">Q: 1/20</div>
             <div class="score-board neon-text-pink">Score: <span id="score" style="color: white;">0</span></div>
         </div>
 
@@ -145,16 +141,16 @@
             <div id="timer-bar"></div>
         </div>
         
-        <div class="question-box" id="question-text">
-            Question load ho raha hai...
-        </div>
+        <div class="question-box" id="question-text">Question load ho raha hai...</div>
 
-        <div class="options-grid">
+        <div class="options-grid" id="options-container">
             <button class="option-btn" id="opt0" onclick="checkAnswer(0)"></button>
             <button class="option-btn" id="opt1" onclick="checkAnswer(1)"></button>
             <button class="option-btn" id="opt2" onclick="checkAnswer(2)"></button>
             <button class="option-btn" id="opt3" onclick="checkAnswer(3)"></button>
         </div>
+
+        <button id="retest-btn" class="retest-btn" onclick="startMegaQuiz()">🔄 Retest Mega Quiz</button>
 
         <div class="creator-signature">
             App by <b>Anuj Kumar</b> | <span class="creator-handle">@TopStudyPro</span>
@@ -162,37 +158,62 @@
     </div>
 
     <script>
-        let quizzes = []; 
-        let currentQuizData = [];
+        // GLOBALS
+        let megaQuizData = []; 
         let currentQuestionIndex = 0;
         let score = 0;
-        let timeLeft = 5;
+        let timeLeft = 5; // Default
+        let maxTime = 5; // Settings se aayega
         let timerInterval;
 
         const tickSound = document.getElementById('tick-sound');
         const revealSound = document.getElementById('reveal-sound');
 
-        document.getElementById('csvFileInput').addEventListener('change', function(e) {
-            try {
-                const file = e.target.files[0];
-                if (!file) return;
+        // MODAL LOGIC
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function updateSettings() {
+            maxTime = parseInt(document.getElementById('timer-setting').value);
+            let themeColor = document.getElementById('theme-setting').value;
+            document.documentElement.style.setProperty('--main-neon', themeColor);
+        }
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    try {
-                        const parsedData = parseCSV(event.target.result);
-                        if(parsedData.length > 0) {
-                            quizzes.push({ name: file.name, data: parsedData });
-                            renderQuizList();
-                            alert(`Success! ${parsedData.length} Hindi questions load ho gaye.`);
-                        } else {
-                            alert("File format check karein.");
-                        }
-                    } catch(err) { alert(err.message); }
-                };
-                reader.readAsText(file, 'UTF-8');
-            } catch(err) { alert(err.message); }
+        // MULTIPLE FILES UPLOAD LOGIC
+        document.getElementById('csvFileInput').addEventListener('change', async function(e) {
+            try {
+                const files = e.target.files;
+                if (files.length === 0) return;
+                
+                megaQuizData = []; // Purana data clear karein
+                document.getElementById('mega-status').innerText = "Processing files...";
+
+                // Loop through all selected files
+                for(let i=0; i < files.length; i++) {
+                    let fileText = await readFileAsText(files[i]);
+                    let parsed = parseCSV(fileText);
+                    megaQuizData = megaQuizData.concat(parsed); // Jodte jao
+                }
+
+                if(megaQuizData.length > 0) {
+                    document.getElementById('mega-status').innerText = `${files.length} Files Total = ${megaQuizData.length} Questions Loaded!`;
+                    document.getElementById('play-mega-btn').style.display = 'block';
+                    document.getElementById('files-played').innerText = files.length; // Profile update
+                } else {
+                    document.getElementById('mega-status').innerText = "Koi valid question nahi mila.";
+                }
+            } catch(err) { alert("Error: " + err.message); }
         });
+
+        // Helper function to read file securely
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsText(file, 'UTF-8');
+            });
+        }
 
         function parseCSV(text) {
             const lines = text.split(/\r?\n/);
@@ -200,42 +221,30 @@
             for(let i = 1; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if(line === '') continue;
-                
                 let cols = line.split(',');
                 if(cols.length >= 6) {
                     cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
                     let ansLetter = cols[5].toUpperCase();
                     let ansIndex = ansLetter === 'A' ? 0 : ansLetter === 'B' ? 1 : ansLetter === 'C' ? 2 : 3;
-                    
                     questions.push({ q: cols[0], options: [cols[1], cols[2], cols[3], cols[4]], answer: ansIndex });
                 }
             }
             return questions;
         }
 
-        function renderQuizList() {
-            const listDiv = document.getElementById('quiz-list');
-            listDiv.innerHTML = '';
-            quizzes.forEach((quiz, index) => {
-                listDiv.innerHTML += `
-                    <div class="quiz-item">
-                        <div class="neon-text-cyan"><strong>${quiz.name}</strong><br><small style="color:#fff;">${quiz.data.length} Questions</small></div>
-                        <button class="play-btn" onclick="startQuiz(${index})">▶ Play</button>
-                    </div>
-                `;
-            });
-        }
-
-        function startQuiz(quizIndex) {
+        function startMegaQuiz() {
             tickSound.play().then(() => tickSound.pause()).catch(e => console.log(e));
             revealSound.play().then(() => revealSound.pause()).catch(e => console.log(e));
 
-            currentQuizData = quizzes[quizIndex].data;
             currentQuestionIndex = 0;
             score = 0;
+            document.getElementById('retest-btn').style.display = 'none';
+            document.getElementById('options-container').style.display = 'flex';
+            
             document.getElementById('dashboard-screen').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('score').innerText = score;
+            
             loadQuestion();
         }
 
@@ -247,12 +256,11 @@
         }
 
         function loadQuestion() {
-            const currentQuestion = currentQuizData[currentQuestionIndex];
+            const currentQuestion = megaQuizData[currentQuestionIndex];
             document.getElementById('question-text').innerText = currentQuestion.q;
-            document.getElementById('q-counter').innerText = `Q: ${currentQuestionIndex + 1}/${currentQuizData.length}`;
+            document.getElementById('q-counter').innerText = `Q: ${currentQuestionIndex + 1}/${megaQuizData.length}`;
 
             const labels = ['A', 'B', 'C', 'D'];
-
             for(let i = 0; i < 4; i++) {
                 let btn = document.getElementById(`opt${i}`);
                 btn.innerHTML = `<span class="opt-letter">${labels[i]}:</span> <span style="flex-grow:1;">${currentQuestion.options[i]}</span>`;
@@ -264,17 +272,17 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 5.0;
+            timeLeft = maxTime; // Settings wali time value
             const timerBar = document.getElementById('timer-bar');
             timerBar.style.width = '100%';
-            timerBar.style.backgroundColor = '#0ff'; 
+            timerBar.style.backgroundColor = 'var(--main-neon)'; 
             
             tickSound.currentTime = 0;
             tickSound.play().catch(e => console.log(e));
 
             timerInterval = setInterval(() => {
                 timeLeft -= 0.1;
-                timerBar.style.width = ((timeLeft / 5) * 100) + '%';
+                timerBar.style.width = ((timeLeft / maxTime) * 100) + '%';
 
                 if(timeLeft <= 2) { timerBar.style.backgroundColor = '#f00'; } 
 
@@ -293,8 +301,7 @@
             revealSound.currentTime = 0;
             revealSound.play().catch(e => console.log(e));
 
-            const currentQuestion = currentQuizData[currentQuestionIndex];
-            
+            const currentQuestion = megaQuizData[currentQuestionIndex];
             if(selectedIndex === currentQuestion.answer) {
                 document.getElementById(`opt${selectedIndex}`).classList.add('correct');
                 score += 1; 
@@ -310,7 +317,7 @@
         function autoRevealAnswer() {
             revealSound.currentTime = 0;
             revealSound.play().catch(e => console.log(e));
-            const currentQuestion = currentQuizData[currentQuestionIndex];
+            const currentQuestion = megaQuizData[currentQuestionIndex];
             document.getElementById(`opt${currentQuestion.answer}`).classList.add('correct');
             lockAndProceed();
         }
@@ -318,25 +325,24 @@
         function triggerPointAnimation() {
             const pointAnim = document.getElementById('point-animation');
             pointAnim.classList.add('show-point');
-            setTimeout(() => {
-                pointAnim.classList.remove('show-point');
-            }, 2000); 
+            setTimeout(() => { pointAnim.classList.remove('show-point'); }, 2000); 
         }
 
         function lockAndProceed() {
-            for(let i = 0; i < 4; i++) {
-                document.getElementById(`opt${i}`).disabled = true;
-            }
+            for(let i = 0; i < 4; i++) { document.getElementById(`opt${i}`).disabled = true; }
+            
             setTimeout(() => {
                 currentQuestionIndex++;
-                if(currentQuestionIndex < currentQuizData.length) {
+                if(currentQuestionIndex < megaQuizData.length) {
                     loadQuestion();
                 } else {
-                    document.getElementById('question-text').innerText = `Quiz Complete!\nScore: ${score}`;
-                    document.querySelector('.options-grid').style.display = "none";
+                    // INFINITE LOOP / RETEST LOGIC
+                    document.getElementById('question-text').innerText = `Mega Quiz Complete!\nFinal Score: ${score}`;
+                    document.getElementById('options-container').style.display = "none";
                     document.getElementById('timer-bar').style.width = '0%';
+                    document.getElementById('retest-btn').style.display = 'block'; // Show Retest Button
                 }
-            }, 7000);
+            }, 5000); // Wait time before next question
         }
     </script>
 </body>
