@@ -11,9 +11,8 @@
             src: url('hindi.ttf') format('truetype');
         }
 
-        /* CSS Variables Settings se change hone ke liye */
         :root {
-            --main-neon: #0ff; /* Default Cyan */
+            --main-neon: #0ff; 
             --bg-color: #050505;
         }
 
@@ -23,18 +22,15 @@
         .neon-text-dynamic { color: var(--main-neon); text-shadow: 0 0 10px var(--main-neon); text-align: center; }
         .neon-text-pink { color: #f0f; text-shadow: 0 0 10px #f0f; }
 
-        /* Top Bar for Profile & Settings */
         .top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .icon-btn { background: transparent; border: 2px solid var(--main-neon); color: var(--main-neon); border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; box-shadow: 0 0 10px var(--main-neon); }
 
         .main-title { text-align: center; font-size: 32px; margin-bottom: 10px; margin-top: 0; }
         .upload-section { text-align: center; margin-bottom: 20px; }
         
-        /* MULTIPLE FILE UPLOAD STYLE */
         .upload-section input { width: 100%; margin-top: 15px; color: var(--main-neon); }
         
         .play-btn { background: var(--main-neon); color: #000; font-weight: bold; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px var(--main-neon); width: 100%; margin-top: 20px; display: none; }
-        
         .retest-btn { background: #f0f; color: #fff; font-weight: bold; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px #f0f; width: 100%; margin-top: 20px; display: none; }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
@@ -55,7 +51,6 @@
         #point-animation { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); font-size: 45px; font-weight: bold; color: #0f0; text-shadow: 0 0 20px #0f0; opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; }
         .show-point { top: 40% !important; opacity: 1 !important; }
 
-        /* MODALS (Settings & Profile) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #111; border: 2px solid var(--main-neon); border-radius: 15px; padding: 20px; width: 85%; text-align: center; box-shadow: 0 0 20px var(--main-neon); }
         .modal-content h2 { color: var(--main-neon); margin-top: 0; }
@@ -79,7 +74,7 @@
             <h2>👤 Profile</h2>
             <p style="font-size: 20px;"><b>Anuj Kumar</b></p>
             <p style="color: #0ff; font-size: 18px;">@TopStudyPro</p>
-            <p>App Version: 2.0 (Pro)</p>
+            <p>App Version: 2.0 (Pro Multi-File)</p>
             <p>Total Files Played: <span id="files-played">0</span></p>
             <button class="close-btn" onclick="closeModal('profile-modal')">Close</button>
         </div>
@@ -119,7 +114,7 @@
         
         <div class="upload-section">
             <p style="color: #fff; font-size: 16px;">Multiple CSV Files Ek Sath Select Karein:</p>
-            <input type="file" id="csvFileInput" accept=".csv" multiple>
+            <input type="file" id="csvFileInput" accept=".csv, text/csv, application/vnd.ms-excel, text/plain, */*" multiple>
         </div>
         
         <p id="mega-status" style="text-align:center; color:#0f0; font-weight:bold;"></p>
@@ -158,18 +153,16 @@
     </div>
 
     <script>
-        // GLOBALS
         let megaQuizData = []; 
         let currentQuestionIndex = 0;
         let score = 0;
-        let timeLeft = 5; // Default
-        let maxTime = 5; // Settings se aayega
+        let timeLeft = 5; 
+        let maxTime = 5; 
         let timerInterval;
 
         const tickSound = document.getElementById('tick-sound');
         const revealSound = document.getElementById('reveal-sound');
 
-        // MODAL LOGIC
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         
@@ -179,33 +172,41 @@
             document.documentElement.style.setProperty('--main-neon', themeColor);
         }
 
-        // MULTIPLE FILES UPLOAD LOGIC
+        // FIX 2: File Select hote hi Alert lagaya taaki app bata sake
         document.getElementById('csvFileInput').addEventListener('change', async function(e) {
             try {
                 const files = e.target.files;
-                if (files.length === 0) return;
+                if (files.length === 0) {
+                    alert("Koi file select nahi hui!");
+                    return;
+                }
                 
-                megaQuizData = []; // Purana data clear karein
+                // User ko confirm karne ke liye popup
+                alert(files.length + " file(s) select ho gayi hain.\nAb app inhe process kar raha hai, kripya wait karein...");
+
+                megaQuizData = []; 
                 document.getElementById('mega-status').innerText = "Processing files...";
 
-                // Loop through all selected files
                 for(let i=0; i < files.length; i++) {
                     let fileText = await readFileAsText(files[i]);
                     let parsed = parseCSV(fileText);
-                    megaQuizData = megaQuizData.concat(parsed); // Jodte jao
+                    megaQuizData = megaQuizData.concat(parsed); 
                 }
 
                 if(megaQuizData.length > 0) {
+                    alert("Success! " + megaQuizData.length + " questions combine ho gaye hain. Ab aap Play kar sakte hain.");
                     document.getElementById('mega-status').innerText = `${files.length} Files Total = ${megaQuizData.length} Questions Loaded!`;
                     document.getElementById('play-mega-btn').style.display = 'block';
-                    document.getElementById('files-played').innerText = files.length; // Profile update
+                    document.getElementById('files-played').innerText = files.length; 
                 } else {
+                    alert("File padh li gayi, par questions nahi mile. Format check karein.");
                     document.getElementById('mega-status').innerText = "Koi valid question nahi mila.";
                 }
-            } catch(err) { alert("Error: " + err.message); }
+            } catch(err) { 
+                alert("Data read karne me error aaya: " + err.message); 
+            }
         });
 
-        // Helper function to read file securely
         function readFileAsText(file) {
             return new Promise((resolve, reject) => {
                 let reader = new FileReader();
@@ -272,7 +273,7 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = maxTime; // Settings wali time value
+            timeLeft = maxTime; 
             const timerBar = document.getElementById('timer-bar');
             timerBar.style.width = '100%';
             timerBar.style.backgroundColor = 'var(--main-neon)'; 
@@ -336,13 +337,12 @@
                 if(currentQuestionIndex < megaQuizData.length) {
                     loadQuestion();
                 } else {
-                    // INFINITE LOOP / RETEST LOGIC
                     document.getElementById('question-text').innerText = `Mega Quiz Complete!\nFinal Score: ${score}`;
                     document.getElementById('options-container').style.display = "none";
                     document.getElementById('timer-bar').style.width = '0%';
-                    document.getElementById('retest-btn').style.display = 'block'; // Show Retest Button
+                    document.getElementById('retest-btn').style.display = 'block'; 
                 }
-            }, 5000); // Wait time before next question
+            }, 5000); 
         }
     </script>
 </body>
