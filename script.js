@@ -1,29 +1,50 @@
-// 1. File Upload Logic (UTF-8 ke sath)
+// 1. File Upload Logic (Android ke liye Fix)
 document.getElementById('csvFileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    // 'UTF-8' lagana zaroori hai taaki Hindi text box ya question mark (?) me convert na ho
-    reader.readAsText(file, 'UTF-8'); 
-    
-    reader.onload = function(event) {
-        const csvData = event.target.result;
-        const parsedData = parseCSV(csvData);
-        
-        if(parsedData.length > 0) {
-            quizzes.push({ name: file.name, data: parsedData });
-            renderQuizList();
-            alert("File successfully upload ho gayi!");
-        } else {
-            alert("CSV format me kuch gadbad hai. Kripya check karein.");
+    try {
+        const file = e.target.files[0];
+        if (!file) {
+            alert("Koi file select nahi hui!");
+            return;
         }
-    };
+
+        // Yeh aapko batayega ki file successfully click ho gayi hai
+        alert("File select ho gayi: " + file.name + "\nProcess kar rahe hain...");
+
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+            try {
+                const csvData = event.target.result;
+                const parsedData = parseCSV(csvData);
+                
+                if(parsedData.length > 0) {
+                    quizzes.push({ name: file.name, data: parsedData });
+                    renderQuizList();
+                    // Yeh success message dega aur batayega kitne questions mile
+                    alert(`Success! ${parsedData.length} questions load ho gaye.`);
+                } else {
+                    alert("File toh padh li, par usme questions nahi mile. Format check karein.");
+                }
+            } catch(err) {
+                alert("Data read karne me error aaya: " + err.message);
+            }
+        };
+
+        // Agar Android ko storage ki permission ka issue hoga toh yeh error dega
+        reader.onerror = function() {
+            alert("File padhne me dikkat aa rahi hai. Kya app ko storage permission mili hai?");
+        };
+
+        reader.readAsText(file, 'UTF-8');
+    } catch(error) {
+        alert("Kuch gadbad hui: " + error.message);
+    }
 });
 
-// CSV ko JavaScript me convert karna (Advanced Parser for Hindi & Excel formats)
+// CSV ko JavaScript me convert karna (Windows aur Android dono ke line-breaks ke liye)
 function parseCSV(text) {
-    const lines = text.split('\n');
+    // \r?\n ka matlab hai chahe enter PC se mara ho ya Mobile se, dono ko pehchaan lega
+    const lines = text.split(/\r?\n/);
     const questions = [];
     
     // Line 1 (Header) skip karke line 2 se padhenge
@@ -31,14 +52,13 @@ function parseCSV(text) {
         let line = lines[i].trim();
         if(line === '') continue;
         
-        // Excel kabhi-kabhi text ke aas-paas quotes ("") laga deta hai, yeh usko handle karega
+        // Comma se split karenge
         let cols = line.split(',');
         
+        // Agar aapke column kam hain toh error nahi aayega, ignore kar dega
         if(cols.length >= 6) {
-            // Quotes hatane aur text ko clean karne ka code
             cols = cols.map(c => c.replace(/^"|"$/g, '').trim());
             
-            // A=0, B=1, C=2, D=3
             let ansLetter = cols[5].toUpperCase();
             let ansIndex = ansLetter === 'A' ? 0 : ansLetter === 'B' ? 1 : ansLetter === 'C' ? 2 : 3;
 
@@ -52,4 +72,4 @@ function parseCSV(text) {
     return questions;
 }
 
-// Baaki aapka timer aur game logic ka code purana wala hi rahega...
+// Baaki aapka neeche ka saara code (renderQuizList, startQuiz, timer etc.) Waisa hi rahega...
